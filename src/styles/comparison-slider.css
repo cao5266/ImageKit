@@ -1,0 +1,32 @@
+/* 图片对比滑块自定义样式 */
+
+img-comparison-slider {
+  --divider-width: 3px;
+  --divider-color: #3b82f6;
+  --default-handle-opacity: 1;
+  --default-handle-width: 40px;
+}
+
+img-comparison-slider::part(divider) {
+  background: var(--divider-color);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+img-comparison-slider::part(handle) {
+  width: var(--default-handle-width);
+  height: var(--default-handle-width);
+  background: white;
+  border: 3px solid var(--divider-color);
+  border-radius: 50%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+img-comparison-slider::part(handle)::before {
+  content: '◀ ▶';
+  font-size: 10px;
+  color: var(--divider-color);
+  font-weight: bold;
+}
