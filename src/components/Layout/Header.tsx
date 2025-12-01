@@ -11,18 +11,18 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-import { UserMenu } from '@/components/Auth/UserMenu';
+// import { UserMenu } from '@/components/Auth/UserMenu';
 
 export function Header() {
   const [open, setOpen] = useState(false);
   
-  const menuItems = [
-    { path: '/remove-watermark', label: 'AI去水印', badge: 'VIP' },
-    { path: '/compress', label: '压缩' },
-    { path: '/convert', label: '转换' },
-    { path: '/resize', label: '调整' },
-    { path: '/crop', label: '裁剪' },
-    { path: '/watermark', label: '水印' },
+  const menuItems: Array<{ path: string; label: string; badge?: string }> = [
+    // { path: '/remove-watermark', label: 'AI Remove', badge: 'VIP' }, // Temporarily disabled
+    { path: '/compress', label: 'Compress' },
+    { path: '/convert', label: 'Convert' },
+    { path: '/resize', label: 'Resize' },
+    { path: '/crop', label: 'Crop' },
+    { path: '/watermark', label: 'Watermark' },
   ];
   
   return (
@@ -53,10 +53,10 @@ export function Header() {
         
         {/* 右侧区域 */}
         <div className="flex items-center gap-4">
-          {/* 用户菜单 - 桌面端显示 */}
-          <div className="hidden md:block">
+          {/* 用户菜单 - 已移除 */}
+          {/* <div className="hidden md:block">
             <UserMenu />
-          </div>
+          </div> */}
           
           {/* 移动端菜单 */}
           <Sheet open={open} onOpenChange={setOpen}>
@@ -88,10 +88,10 @@ export function Header() {
                     )}
                   </Link>
                 ))}
-                {/* 移动端用户菜单 */}
-                <div className="border-t pt-4 mt-4">
+                {/* 移动端用户菜单 - 已移除 */}
+                {/* <div className="border-t pt-4 mt-4">
                   <UserMenu />
-                </div>
+                </div> */}
               </nav>
             </SheetContent>
           </Sheet>

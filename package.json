@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "完全免费 · 本地处理 · 隐私安全 · 比 TinyPNG 更强大",
+  "description": "Free · Local Processing · Privacy First · More Powerful than TinyPNG",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

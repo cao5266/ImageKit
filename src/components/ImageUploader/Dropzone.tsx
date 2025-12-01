@@ -1,4 +1,4 @@
-// 拖拽上传组件
+// Drag and drop upload component
 
 import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -18,7 +18,7 @@ export function Dropzone() {
     }
     
     if (invalid.length > 0) {
-      // TODO: 显示错误提示
+      // TODO: Show error message
       console.error('Invalid files:', invalid);
     }
   }, [addImages]);
@@ -48,12 +48,12 @@ export function Dropzone() {
       <input {...getInputProps()} />
       <Upload className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-400" />
       {isDragActive ? (
-        <p className="text-base sm:text-lg font-medium">释放鼠标上传图片</p>
+        <p className="text-base sm:text-lg font-medium">Drop to upload images</p>
       ) : (
         <>
-          <p className="text-base sm:text-lg font-medium mb-2">拖拽图片到这里</p>
+          <p className="text-base sm:text-lg font-medium mb-2">Drag images here</p>
           <p className="text-xs sm:text-sm text-muted-foreground px-4">
-            或点击选择文件（支持 JPG、PNG、WebP，最大 10MB）
+            or click to select files (JPG, PNG, WebP supported, max 10MB)
           </p>
         </>
       )}

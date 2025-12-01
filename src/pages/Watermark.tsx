@@ -1,4 +1,4 @@
-// 图片水印页面
+// Image Watermark Page
 
 import { useState } from 'react';
 import { Dropzone } from '@/components/ImageUploader/Dropzone';
@@ -16,7 +16,7 @@ import { Download, Trash2, Grid3x3, List, Type, Image as ImageIcon } from 'lucid
 
 export function Watermark() {
   const [watermarkType, setWatermarkType] = useState<'text' | 'image'>('text');
-  const [watermarkText, setWatermarkText] = useState('水印文字');
+  const [watermarkText, setWatermarkText] = useState('Watermark Text');
   const [watermarkImage, setWatermarkImage] = useState<string | null>(null);
   const [position, setPosition] = useState<'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | 'center'>('bottom-right');
   const [opacity, setOpacity] = useState(80);
@@ -32,16 +32,16 @@ export function Watermark() {
   const updateImage = useImageStore(state => state.updateImage);
   const clearAll = useImageStore(state => state.clearAll);
   
-  // 位置预设
+  // Position presets
   const positionOptions = [
-    { value: 'top-left' as const, label: '左上' },
-    { value: 'top-right' as const, label: '右上' },
-    { value: 'bottom-left' as const, label: '左下' },
-    { value: 'bottom-right' as const, label: '右下' },
-    { value: 'center' as const, label: '居中' },
+    { value: 'top-left' as const, label: 'Top Left' },
+    { value: 'top-right' as const, label: 'Top Right' },
+    { value: 'bottom-left' as const, label: 'Bottom Left' },
+    { value: 'bottom-right' as const, label: 'Bottom Right' },
+    { value: 'center' as const, label: 'Center' },
   ];
   
-  // 上传水印图片
+  // Upload watermark image
   const handleWatermarkImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -53,18 +53,18 @@ export function Watermark() {
     reader.readAsDataURL(file);
   };
   
-  // 添加水印到单张图片
+  // Add watermark to single image
   const handleAddWatermarkSingle = async (imageId: string) => {
     const image = images.find(img => img.id === imageId);
     if (!image) return;
     
-    // 验证水印内容
+    // Validate watermark content
     if (watermarkType === 'text' && !watermarkText.trim()) {
-      alert('请输入水印文字');
+      alert('Please enter watermark text');
       return;
     }
     if (watermarkType === 'image' && !watermarkImage) {
-      alert('请上传水印图片');
+      alert('Please upload watermark image');
       return;
     }
     
@@ -103,22 +103,22 @@ export function Watermark() {
     } catch (error) {
       updateImage(imageId, { 
         status: 'error',
-        error: error instanceof Error ? error.message : '添加水印失败'
+        error: error instanceof Error ? error.message : 'Failed to add watermark'
       });
     }
   };
   
-  // 批量添加水印
+  // Batch add watermark
   const handleAddWatermarkAll = async () => {
     if (images.length === 0) return;
     
-    // 验证水印内容
+    // Validate watermark content
     if (watermarkType === 'text' && !watermarkText.trim()) {
-      alert('请输入水印文字');
+      alert('Please enter watermark text');
       return;
     }
     if (watermarkType === 'image' && !watermarkImage) {
-      alert('请上传水印图片');
+      alert('Please upload watermark image');
       return;
     }
     
@@ -133,7 +133,7 @@ export function Watermark() {
     }
   };
   
-  // 下载单张图片
+  // Download single image
   const handleDownloadSingle = async (imageId: string) => {
     const image = images.find(img => img.id === imageId);
     if (!image || !image.processedUrl) return;
@@ -143,11 +143,11 @@ export function Watermark() {
       const blob = await response.blob();
       downloadFile(blob, image.originalFile.name);
     } catch (error) {
-      console.error('下载失败:', error);
+      console.error('Download failed:', error);
     }
   };
   
-  // 批量下载所有图片
+  // Batch download all images
   const handleDownloadAll = async () => {
     const completedImages = images.filter(
       img => img.status === 'completed' && img.processedUrl
@@ -177,13 +177,13 @@ export function Watermark() {
     <div className="container mx-auto px-4 py-6 sm:py-8">
       <div className="mb-6 sm:mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">添加水印</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Add Watermark</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            为图片添加文字或图片水印，保护版权
+            Add text or image watermark to protect copyright
           </p>
         </div>
         
-        {/* 视图切换按钮 */}
+        {/* View mode toggle */}
         {hasImages && (
           <div className="flex gap-1 border rounded-md p-1">
             <Button
@@ -207,15 +207,15 @@ export function Watermark() {
       </div>
       
       <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 sm:gap-6">
-        {/* 工具面板 */}
+        {/* Tool panel */}
         <div className="lg:col-span-1 order-first">
           <Card className="p-4 sm:p-6 lg:sticky lg:top-24">
-            <h2 className="font-bold mb-4 text-base sm:text-lg">水印设置</h2>
+            <h2 className="font-bold mb-4 text-base sm:text-lg">Watermark Settings</h2>
             
             <div className="space-y-4 sm:space-y-6">
-              {/* 水印类型 */}
+              {/* Watermark type */}
               <div>
-                <Label className="mb-2 block">水印类型</Label>
+                <Label className="mb-2 block">Watermark Type</Label>
                 <div className="grid grid-cols-2 gap-2">
                   <Button
                     variant={watermarkType === 'text' ? 'default' : 'outline'}
@@ -224,7 +224,7 @@ export function Watermark() {
                     className="text-xs"
                   >
                     <Type className="w-4 h-4 mr-1" />
-                    文字
+                    Text
                   </Button>
                   <Button
                     variant={watermarkType === 'image' ? 'default' : 'outline'}
@@ -233,28 +233,28 @@ export function Watermark() {
                     className="text-xs"
                   >
                     <ImageIcon className="w-4 h-4 mr-1" />
-                    图片
+                    Image
                   </Button>
                 </div>
               </div>
               
-              {/* 文字水印设置 */}
+              {/* Text watermark settings */}
               {watermarkType === 'text' && (
                 <>
                   <div>
-                    <Label htmlFor="watermark-text">水印文字</Label>
+                    <Label htmlFor="watermark-text">Watermark Text</Label>
                     <Input
                       id="watermark-text"
                       value={watermarkText}
                       onChange={(e) => setWatermarkText(e.target.value)}
-                      placeholder="输入水印文字"
+                      placeholder="Enter watermark text"
                       className="mt-1"
                     />
                   </div>
                   
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <Label>字号</Label>
+                      <Label>Font Size</Label>
                       <span className="text-sm text-muted-foreground">{fontSize}px</span>
                     </div>
                     <Slider
@@ -267,7 +267,7 @@ export function Watermark() {
                   </div>
                   
                   <div>
-                    <Label htmlFor="font-color">字体颜色</Label>
+                    <Label htmlFor="font-color">Font Color</Label>
                     <div className="flex gap-2 mt-1">
                       <Input
                         id="font-color"
@@ -287,11 +287,11 @@ export function Watermark() {
                 </>
               )}
               
-              {/* 图片水印设置 */}
+              {/* Image watermark settings */}
               {watermarkType === 'image' && (
                 <>
                   <div>
-                    <Label htmlFor="watermark-image">水印图片</Label>
+                    <Label htmlFor="watermark-image">Watermark Image</Label>
                     <Input
                       id="watermark-image"
                       type="file"
@@ -303,7 +303,7 @@ export function Watermark() {
                       <div className="mt-2 p-2 bg-muted rounded-lg">
                         <img 
                           src={watermarkImage} 
-                          alt="水印预览" 
+                          alt="Watermark preview" 
                           className="max-w-full h-20 object-contain mx-auto"
                         />
                       </div>
@@ -312,7 +312,7 @@ export function Watermark() {
                   
                   <div>
                     <div className="flex items-center justify-between mb-2">
-                      <Label>水印大小</Label>
+                      <Label>Watermark Size</Label>
                       <span className="text-sm text-muted-foreground">{watermarkScale}%</span>
                     </div>
                     <Slider
@@ -323,15 +323,15 @@ export function Watermark() {
                       step={5}
                     />
                     <p className="text-xs text-muted-foreground mt-1">
-                      推荐 30-50% 之间
+                      Recommended 30-50%
                     </p>
                   </div>
                 </>
               )}
               
-              {/* 通用设置 */}
+              {/* Common settings */}
               <div>
-                <Label className="mb-2 block">水印位置</Label>
+                <Label className="mb-2 block">Watermark Position</Label>
                 <div className="grid grid-cols-3 gap-2">
                   {positionOptions.map((pos) => (
                     <Button
@@ -349,7 +349,7 @@ export function Watermark() {
               
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <Label>透明度</Label>
+                  <Label>Opacity</Label>
                   <span className="text-sm text-muted-foreground">{opacity}%</span>
                 </div>
                 <Slider
@@ -363,7 +363,7 @@ export function Watermark() {
               
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <Label htmlFor="offset-x">水平偏移</Label>
+                  <Label htmlFor="offset-x">Horizontal Offset</Label>
                   <Input
                     id="offset-x"
                     type="number"
@@ -373,7 +373,7 @@ export function Watermark() {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="offset-y">垂直偏移</Label>
+                  <Label htmlFor="offset-y">Vertical Offset</Label>
                   <Input
                     id="offset-y"
                     type="number"
@@ -384,21 +384,21 @@ export function Watermark() {
                 </div>
               </div>
               
-              {/* 统计信息 */}
+              {/* Statistics */}
               {hasImages && (
                 <div className="p-3 bg-muted rounded-lg space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">总数</span>
+                    <span className="text-muted-foreground">Total</span>
                     <span className="font-medium">{images.length}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">已完成</span>
+                    <span className="text-muted-foreground">Completed</span>
                     <span className="font-medium text-green-600">{completedCount}</span>
                   </div>
                 </div>
               )}
               
-              {/* 操作按钮 */}
+              {/* Action buttons */}
               <div className="space-y-2">
                 <Button
                   onClick={handleAddWatermarkAll}
@@ -407,10 +407,10 @@ export function Watermark() {
                   size="lg"
                 >
                   {processing 
-                    ? '处理中...' 
+                    ? 'Processing...' 
                     : hasCompleted 
-                      ? `重新添加 ${images.length}张` 
-                      : `添加水印 ${images.length}张`
+                      ? `Re-add ${images.length} images` 
+                      : `Add Watermark ${images.length} images`
                   }
                 </Button>
                 
@@ -422,7 +422,7 @@ export function Watermark() {
                     className="w-full"
                   >
                     <Download className="w-4 h-4 mr-1" />
-                    <span>下载 ({completedCount})</span>
+                    <span>Download ({completedCount})</span>
                   </Button>
                   
                   <Button
@@ -432,7 +432,7 @@ export function Watermark() {
                     className="w-full"
                   >
                     <Trash2 className="w-4 h-4 mr-1" />
-                    <span>清空</span>
+                    <span>Clear</span>
                   </Button>
                 </div>
               </div>
@@ -440,12 +440,12 @@ export function Watermark() {
           </Card>
         </div>
         
-        {/* 主内容区 */}
+        {/* Main content */}
         <div className="lg:col-span-3">
           {!hasImages ? (
             <Dropzone />
           ) : viewMode === 'grid' ? (
-            // 网格视图
+            // Grid view
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
               {images.map(image => (
                 <ImageCard 
@@ -456,7 +456,7 @@ export function Watermark() {
               ))}
             </div>
           ) : (
-            // 列表视图
+            // List view
             <div className="space-y-2 sm:space-y-3">
               {images.map(image => (
                 <ImageListItem

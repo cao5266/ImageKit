@@ -1,4 +1,4 @@
-// 图片压缩页面
+// Image Compression Page
 
 import { useState } from 'react';
 import { Dropzone } from '@/components/ImageUploader/Dropzone';
@@ -22,22 +22,22 @@ export function Compress() {
   const updateImage = useImageStore(state => state.updateImage);
   const clearAll = useImageStore(state => state.clearAll);
   
-  // 压缩预设
+  // Compression presets
   const presets = [
-    { label: '高质量', quality: 90, desc: '轻度压缩，保持画质' },
-    { label: '标准', quality: 80, desc: '平衡质量和大小' },
-    { label: '高压缩', quality: 60, desc: '大幅缩小，适合网页' },
+    { label: 'High', quality: 90, desc: 'Light compression, preserve quality' },
+    { label: 'Medium', quality: 80, desc: 'Balance quality and size' },
+    { label: 'Low', quality: 60, desc: 'Maximum compression, web optimized' },
   ];
   
-  // 输出格式选项
+  // Output format options
   const formatOptions = [
-    { value: 'original' as const, label: '原格式' },
+    { value: 'original' as const, label: 'Original' },
     { value: 'jpeg' as const, label: 'JPG' },
     { value: 'png' as const, label: 'PNG' },
     { value: 'webp' as const, label: 'WebP' },
   ];
   
-  // 压缩单张图片（直接压缩为目标格式）
+  // Compress single image
   const handleCompressSingle = async (imageId: string) => {
     const image = images.find(img => img.id === imageId);
     if (!image) return;
@@ -45,7 +45,7 @@ export function Compress() {
     try {
       updateImage(imageId, { status: 'processing' });
       
-      // 直接压缩为目标格式，显示的大小就是最终导出的大小
+      // Compress to target format directly
       const result = await compressImage(
         image.originalFile, 
         { quality },
@@ -61,19 +61,19 @@ export function Compress() {
     } catch (error) {
       updateImage(imageId, { 
         status: 'error',
-        error: error instanceof Error ? error.message : '压缩失败'
+        error: error instanceof Error ? error.message : 'Compression failed'
       });
     }
   };
   
-  // 批量压缩所有图片（支持重新压缩）
+  // Batch compress all images
   const handleCompressAll = async () => {
     if (images.length === 0) return;
     
     setProcessing(true);
     
     try {
-      // 压缩所有图片，包括已完成的（参数改变时可以重新压缩）
+      // Compress all images, including completed ones
       for (const image of images) {
         await handleCompressSingle(image.id);
       }
@@ -82,7 +82,7 @@ export function Compress() {
     }
   };
   
-  // 下载单张图片（已经是目标格式）
+  // Download single image
   const handleDownloadSingle = async (imageId: string) => {
     const image = images.find(img => img.id === imageId);
     if (!image || !image.processedUrl) return;
@@ -91,7 +91,7 @@ export function Compress() {
       const response = await fetch(image.processedUrl);
       const blob = await response.blob();
       
-      // 修改文件名扩展名
+      // Modify file extension
       const originalName = image.originalFile.name;
       const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.'));
       const newExt = outputFormat === 'original' ? 
@@ -100,11 +100,11 @@ export function Compress() {
       
       downloadFile(blob, `${nameWithoutExt}${newExt}`);
     } catch (error) {
-      console.error('下载失败:', error);
+      console.error('Download failed:', error);
     }
   };
   
-  // 批量下载所有图片（已经是目标格式）
+  // Batch download all images
   const handleDownloadAll = async () => {
     const completedImages = images.filter(
       img => img.status === 'completed' && img.processedUrl
@@ -117,7 +117,7 @@ export function Compress() {
         const response = await fetch(img.processedUrl!);
         const blob = await response.blob();
         
-        // 修改文件名扩展名
+        // Modify file extension
         const originalName = img.originalFile.name;
         const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.'));
         const newExt = outputFormat === 'original' ? 
@@ -142,13 +142,13 @@ export function Compress() {
     <div className="container mx-auto px-4 py-6 sm:py-8">
       <div className="mb-6 sm:mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">图片压缩</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Image Compression</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            减小文件大小，保持画质，支持批量处理
+            Reduce file size while maintaining quality, batch processing supported
           </p>
         </div>
         
-        {/* 视图切换按钮 */}
+        {/* View mode toggle */}
         {hasImages && (
           <div className="flex gap-1 border rounded-md p-1">
             <Button
@@ -172,15 +172,15 @@ export function Compress() {
       </div>
       
       <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 sm:gap-6">
-        {/* 工具面板 - 移动端在顶部，桌面端在左侧 */}
+        {/* Tool panel */}
         <div className="lg:col-span-1 order-first">
           <Card className="p-4 sm:p-6 lg:sticky lg:top-24">
-            <h2 className="font-bold mb-4 text-base sm:text-lg">压缩设置</h2>
+            <h2 className="font-bold mb-4 text-base sm:text-lg">Compression Settings</h2>
             
             <div className="space-y-4 sm:space-y-6">
-              {/* 快速预设 */}
+              {/* Quick presets */}
               <div>
-                <label className="text-sm font-medium mb-2 block">快速预设</label>
+                <label className="text-sm font-medium mb-2 block">Quick Presets</label>
                 <div className="grid grid-cols-3 gap-2">
                   {presets.map((preset) => (
                     <Button
@@ -195,13 +195,13 @@ export function Compress() {
                   ))}
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
-                  {presets.find(p => p.quality === quality)?.desc || '自定义质量'}
+                  {presets.find(p => p.quality === quality)?.desc || 'Custom quality'}
                 </p>
               </div>
               
-              {/* 输出格式 */}
+              {/* Output format */}
               <div>
-                <label className="text-sm font-medium mb-2 block">输出格式</label>
+                <label className="text-sm font-medium mb-2 block">Output Format</label>
                 <div className="grid grid-cols-4 gap-2">
                   {formatOptions.map((format) => (
                     <Button
@@ -216,14 +216,14 @@ export function Compress() {
                   ))}
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
-                  💡 显示的大小即为{outputFormat === 'original' ? '原格式' : outputFormat.toUpperCase()}最终大小
+                  💡 The displayed size is the final {outputFormat === 'original' ? 'original format' : outputFormat.toUpperCase()} size
                 </p>
               </div>
               
-              {/* 质量滑块 */}
+              {/* Quality slider */}
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="text-sm font-medium">精细调节</label>
+                  <label className="text-sm font-medium">Fine Tune</label>
                   <span className="text-sm font-bold text-primary">{quality}%</span>
                 </div>
                 <Slider
@@ -236,27 +236,27 @@ export function Compress() {
                 />
                 <p className="text-xs text-muted-foreground">
                   {hasCompleted 
-                    ? '💡 修改参数后点击"重新压缩"生效' 
-                    : '推荐80%（接近TinyPNG效果）'
+                    ? '💡 Click "Re-compress" after changing parameters' 
+                    : 'Recommended 80% (similar to TinyPNG)'
                   }
                 </p>
               </div>
               
-              {/* 统计信息 */}
+              {/* Statistics */}
               {hasImages && (
                 <div className="p-3 bg-muted rounded-lg space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">总数</span>
+                    <span className="text-muted-foreground">Total</span>
                     <span className="font-medium">{images.length}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">已完成</span>
+                    <span className="text-muted-foreground">Completed</span>
                     <span className="font-medium text-green-600">{completedCount}</span>
                   </div>
                 </div>
               )}
               
-              {/* 操作按钮 */}
+              {/* Action buttons */}
               <div className="space-y-2">
                 <Button
                   onClick={handleCompressAll}
@@ -265,10 +265,10 @@ export function Compress() {
                   size="lg"
                 >
                   {processing 
-                    ? '压缩中...' 
+                    ? 'Compressing...' 
                     : hasCompleted 
-                      ? `重新压缩 ${images.length}张` 
-                      : `压缩 ${images.length}张`
+                      ? `Re-compress ${images.length} images` 
+                      : `Compress ${images.length} images`
                   }
                 </Button>
                 
@@ -280,7 +280,7 @@ export function Compress() {
                     className="w-full"
                   >
                     <Download className="w-4 h-4 mr-1" />
-                    <span>下载 ({completedCount})</span>
+                    <span>Download ({completedCount})</span>
                   </Button>
                   
                   <Button
@@ -290,7 +290,7 @@ export function Compress() {
                     className="w-full"
                   >
                     <Trash2 className="w-4 h-4 mr-1" />
-                    <span>清空</span>
+                    <span>Clear</span>
                   </Button>
                 </div>
               </div>
@@ -298,12 +298,12 @@ export function Compress() {
           </Card>
         </div>
         
-        {/* 主内容区 */}
+        {/* Main content */}
         <div className="lg:col-span-3">
           {!hasImages ? (
             <Dropzone />
           ) : viewMode === 'grid' ? (
-            // 网格视图
+            // Grid view
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
               {images.map(image => (
                 <ImageCard 
@@ -314,7 +314,7 @@ export function Compress() {
               ))}
             </div>
           ) : (
-            // 列表视图
+            // List view
             <div className="space-y-2 sm:space-y-3">
               {images.map(image => (
                 <ImageListItem

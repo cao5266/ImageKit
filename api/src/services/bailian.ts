@@ -45,7 +45,7 @@ export async function removeWatermarkWithAI(
       model: 'wanx2.1-imageedit',
       input: {
         function: 'remove_watermark',
-        prompt: options?.prompt || '去除图像中的文字',
+        prompt: options?.prompt || '去除图像中的水印',
         base_image_url: imageUrl
       },
       parameters: {

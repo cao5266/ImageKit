@@ -1,4 +1,4 @@
-// 图片尺寸调整页面
+// Image Resize Page
 
 import { useState } from 'react';
 import { Dropzone } from '@/components/ImageUploader/Dropzone';
@@ -27,7 +27,7 @@ export function Resize() {
   const updateImage = useImageStore(state => state.updateImage);
   const clearAll = useImageStore(state => state.clearAll);
   
-  // 预设尺寸
+  // Preset sizes
   const presetSizes = [
     { label: '1920×1080', width: 1920, height: 1080 },
     { label: '1280×720', width: 1280, height: 720 },
@@ -35,7 +35,7 @@ export function Resize() {
     { label: '640×480', width: 640, height: 480 },
   ];
   
-  // 预设比例
+  // Preset scales
   const presetScales = [
     { label: '200%', value: 200 },
     { label: '150%', value: 150 },
@@ -45,7 +45,7 @@ export function Resize() {
     { label: '25%', value: 25 },
   ];
   
-  // 调整单张图片
+  // Resize single image
   const handleResizeSingle = async (imageId: string) => {
     const image = images.find(img => img.id === imageId);
     if (!image) return;
@@ -72,12 +72,12 @@ export function Resize() {
     } catch (error) {
       updateImage(imageId, { 
         status: 'error',
-        error: error instanceof Error ? error.message : '调整失败'
+        error: error instanceof Error ? error.message : 'Resize failed'
       });
     }
   };
   
-  // 批量调整所有图片
+  // Batch resize all images
   const handleResizeAll = async () => {
     if (images.length === 0) return;
     
@@ -92,7 +92,7 @@ export function Resize() {
     }
   };
   
-  // 下载单张图片
+  // Download single image
   const handleDownloadSingle = async (imageId: string) => {
     const image = images.find(img => img.id === imageId);
     if (!image || !image.processedUrl) return;
@@ -102,11 +102,11 @@ export function Resize() {
       const blob = await response.blob();
       downloadFile(blob, image.originalFile.name);
     } catch (error) {
-      console.error('下载失败:', error);
+      console.error('Download failed:', error);
     }
   };
   
-  // 批量下载所有图片
+  // Batch download all images
   const handleDownloadAll = async () => {
     const completedImages = images.filter(
       img => img.status === 'completed' && img.processedUrl
@@ -136,13 +136,13 @@ export function Resize() {
     <div className="container mx-auto px-4 py-6 sm:py-8">
       <div className="mb-6 sm:mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">调整大小</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Resize Image</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            修改图片尺寸，支持像素和百分比调整
+            Change image dimensions, supports pixel and percentage adjustment
           </p>
         </div>
         
-        {/* 视图切换按钮 */}
+        {/* View mode toggle */}
         {hasImages && (
           <div className="flex gap-1 border rounded-md p-1">
             <Button
@@ -166,15 +166,15 @@ export function Resize() {
       </div>
       
       <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 sm:gap-6">
-        {/* 工具面板 */}
+        {/* Tool panel */}
         <div className="lg:col-span-1 order-first">
           <Card className="p-4 sm:p-6 lg:sticky lg:top-24">
-            <h2 className="font-bold mb-4 text-base sm:text-lg">调整设置</h2>
+            <h2 className="font-bold mb-4 text-base sm:text-lg">Resize Settings</h2>
             
             <div className="space-y-4 sm:space-y-6">
-              {/* 调整模式 */}
+              {/* Resize mode */}
               <div>
-                <Label className="mb-2 block">调整模式</Label>
+                <Label className="mb-2 block">Resize Mode</Label>
                 <div className="grid grid-cols-2 gap-2">
                   <Button
                     variant={resizeMode === 'dimension' ? 'default' : 'outline'}
@@ -182,7 +182,7 @@ export function Resize() {
                     onClick={() => setResizeMode('dimension')}
                     className="text-xs"
                   >
-                    指定尺寸
+                    By Dimension
                   </Button>
                   <Button
                     variant={resizeMode === 'scale' ? 'default' : 'outline'}
@@ -190,42 +190,42 @@ export function Resize() {
                     onClick={() => setResizeMode('scale')}
                     className="text-xs"
                   >
-                    缩放比例
+                    By Scale
                   </Button>
                 </div>
               </div>
               
               {resizeMode === 'dimension' ? (
                 <>
-                  {/* 尺寸输入 */}
+                  {/* Dimension input */}
                   <div className="space-y-3">
                     <div>
-                      <Label htmlFor="width">宽度 (px)</Label>
+                      <Label htmlFor="width">Width (px)</Label>
                       <Input
                         id="width"
                         type="number"
                         value={width}
                         onChange={(e) => setWidth(e.target.value)}
-                        placeholder="输入宽度"
+                        placeholder="Enter width"
                         className="mt-1"
                       />
                     </div>
                     <div>
-                      <Label htmlFor="height">高度 (px)</Label>
+                      <Label htmlFor="height">Height (px)</Label>
                       <Input
                         id="height"
                         type="number"
                         value={height}
                         onChange={(e) => setHeight(e.target.value)}
-                        placeholder="输入高度"
+                        placeholder="Enter height"
                         className="mt-1"
                       />
                     </div>
                   </div>
                   
-                  {/* 保持比例 */}
+                  {/* Keep aspect ratio */}
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="keep-ratio">保持宽高比</Label>
+                    <Label htmlFor="keep-ratio">Keep Aspect Ratio</Label>
                     <Switch
                       id="keep-ratio"
                       checked={keepAspectRatio}
@@ -233,9 +233,9 @@ export function Resize() {
                     />
                   </div>
                   
-                  {/* 预设尺寸 */}
+                  {/* Preset sizes */}
                   <div>
-                    <Label className="mb-2 block">快速预设</Label>
+                    <Label className="mb-2 block">Quick Presets</Label>
                     <div className="grid grid-cols-2 gap-2">
                       {presetSizes.map((size) => (
                         <Button
@@ -256,22 +256,22 @@ export function Resize() {
                 </>
               ) : (
                 <>
-                  {/* 缩放比例 */}
+                  {/* Scale percentage */}
                   <div>
-                    <Label htmlFor="scale">缩放比例 (%)</Label>
+                    <Label htmlFor="scale">Scale (%)</Label>
                     <Input
                       id="scale"
                       type="number"
                       value={scale}
                       onChange={(e) => setScale(e.target.value)}
-                      placeholder="输入百分比"
+                      placeholder="Enter percentage"
                       className="mt-1"
                     />
                   </div>
                   
-                  {/* 预设比例 */}
+                  {/* Preset scales */}
                   <div>
-                    <Label className="mb-2 block">快速预设</Label>
+                    <Label className="mb-2 block">Quick Presets</Label>
                     <div className="grid grid-cols-3 gap-2">
                       {presetScales.map((preset) => (
                         <Button
@@ -289,21 +289,21 @@ export function Resize() {
                 </>
               )}
               
-              {/* 统计信息 */}
+              {/* Statistics */}
               {hasImages && (
                 <div className="p-3 bg-muted rounded-lg space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">总数</span>
+                    <span className="text-muted-foreground">Total</span>
                     <span className="font-medium">{images.length}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">已完成</span>
+                    <span className="text-muted-foreground">Completed</span>
                     <span className="font-medium text-green-600">{completedCount}</span>
                   </div>
                 </div>
               )}
               
-              {/* 操作按钮 */}
+              {/* Action buttons */}
               <div className="space-y-2">
                 <Button
                   onClick={handleResizeAll}
@@ -312,10 +312,10 @@ export function Resize() {
                   size="lg"
                 >
                   {processing 
-                    ? '调整中...' 
+                    ? 'Resizing...' 
                     : hasCompleted 
-                      ? `重新调整 ${images.length}张` 
-                      : `调整 ${images.length}张`
+                      ? `Re-resize ${images.length} images` 
+                      : `Resize ${images.length} images`
                   }
                 </Button>
                 
@@ -327,7 +327,7 @@ export function Resize() {
                     className="w-full"
                   >
                     <Download className="w-4 h-4 mr-1" />
-                    <span>下载 ({completedCount})</span>
+                    <span>Download ({completedCount})</span>
                   </Button>
                   
                   <Button
@@ -337,7 +337,7 @@ export function Resize() {
                     className="w-full"
                   >
                     <Trash2 className="w-4 h-4 mr-1" />
-                    <span>清空</span>
+                    <span>Clear</span>
                   </Button>
                 </div>
               </div>
@@ -346,7 +346,7 @@ export function Resize() {
           </Card>
         </div>
         
-        {/* 主内容区 */}
+        {/* Main content */}
         <div className="lg:col-span-3">
           {!hasImages ? (
             <Dropzone />

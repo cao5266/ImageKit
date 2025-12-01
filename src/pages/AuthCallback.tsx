@@ -1,4 +1,4 @@
-// Google OAuth 回调处理页面
+// Google OAuth Callback Page
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
@@ -13,32 +13,32 @@ export function AuthCallback() {
   useEffect(() => {
     const handleCallback = async () => {
       try {
-        // 从 URL 获取 token
+        // Get token from URL
         const params = new URLSearchParams(window.location.search);
         const token = params.get('token');
         const errorParam = params.get('error');
 
-        // 检查是否有错误
+        // Check for errors
         if (errorParam) {
-          setError('登录失败：' + errorParam);
+          setError('Login failed: ' + errorParam);
           setTimeout(() => navigate('/login'), 2000);
           return;
         }
 
         if (!token) {
-          setError('未获取到认证令牌');
+          setError('Authentication token not received');
           setTimeout(() => navigate('/login'), 2000);
           return;
         }
 
-        // 保存 token
+        // Save token
         api.auth.saveToken(token);
         setToken(token);
 
-        // 获取用户信息
+        // Get user information
         const { user } = await api.auth.getCurrentUser();
         
-        // 转换为前端需要的格式
+        // Convert to frontend format
         setUser({
           id: user._id,
           email: user.email,
@@ -49,13 +49,13 @@ export function AuthCallback() {
           vipLevel: user.vipLevel,
         });
 
-        // 跳转到首页
+        // Redirect to home page
         setTimeout(() => {
           navigate('/');
         }, 1000);
       } catch (err: any) {
         console.error('Auth callback error:', err);
-        setError(err.message || '登录失败，请重试');
+        setError(err.message || 'Login failed, please try again');
         setTimeout(() => navigate('/login'), 2000);
       }
     };
@@ -69,17 +69,17 @@ export function AuthCallback() {
         {error ? (
           <>
             <div className="text-red-500 text-4xl">❌</div>
-            <h2 className="text-xl font-semibold text-gray-900">登录失败</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Login Failed</h2>
             <p className="text-sm text-red-600">{error}</p>
-            <p className="text-xs text-gray-500">正在返回登录页...</p>
+            <p className="text-xs text-gray-500">Redirecting to login page...</p>
           </>
         ) : (
           <>
             <div className="flex justify-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
-            <h2 className="text-xl font-semibold text-gray-900">登录中...</h2>
-            <p className="text-sm text-gray-600">正在验证您的账号</p>
+            <h2 className="text-xl font-semibold text-gray-900">Logging in...</h2>
+            <p className="text-sm text-gray-600">Verifying your account</p>
           </>
         )}
       </Card>

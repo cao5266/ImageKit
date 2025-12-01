@@ -1,4 +1,4 @@
-// 图片预览卡片组件
+// Image preview card component
 
 import { X, Download } from 'lucide-react';
 import { Card } from '@/components/ui/card';
@@ -19,9 +19,9 @@ export function ImageCard({ image, onDownload }: ImageCardProps) {
   
   return (
     <Card className="p-3 sm:p-4 relative group">
-      {/* 操作按钮组 */}
+      {/* Action buttons */}
       <div className="absolute top-2 right-2 flex gap-1 z-10">
-        {/* 下载按钮 - 仅在处理完成后显示 */}
+        {/* Download button - only show after processing */}
         {image.status === 'completed' && onDownload && (
           <Button
             variant="secondary"
@@ -33,7 +33,7 @@ export function ImageCard({ image, onDownload }: ImageCardProps) {
           </Button>
         )}
         
-        {/* 删除按钮 */}
+        {/* Delete button */}
         <Button
           variant="destructive"
           size="icon"
@@ -44,7 +44,7 @@ export function ImageCard({ image, onDownload }: ImageCardProps) {
         </Button>
       </div>
       
-      {/* 图片预览 */}
+      {/* Image preview */}
       <div className="aspect-square bg-gray-100 rounded-md mb-2 sm:mb-3 overflow-hidden">
         <img
           src={image.processedUrl || image.originalUrl}
@@ -53,7 +53,7 @@ export function ImageCard({ image, onDownload }: ImageCardProps) {
         />
       </div>
       
-      {/* 文件信息 */}
+      {/* File info */}
       <div className="space-y-1.5 sm:space-y-2">
         <p className="text-xs sm:text-sm font-medium truncate" title={image.originalFile.name}>
           {image.originalFile.name}
@@ -64,28 +64,28 @@ export function ImageCard({ image, onDownload }: ImageCardProps) {
           
           {image.status === 'completed' && image.compressionRatio && (
             <Badge variant="secondary" className="bg-green-100 text-green-800 text-[10px] sm:text-xs px-1.5 py-0">
-              省{image.compressionRatio.toFixed(0)}%
+              -{image.compressionRatio.toFixed(0)}%
             </Badge>
           )}
           
           {image.status === 'processing' && (
-            <Badge className="text-[10px] sm:text-xs px-1.5 py-0">处理中</Badge>
+            <Badge className="text-[10px] sm:text-xs px-1.5 py-0">Processing</Badge>
           )}
           
           {image.status === 'error' && (
-            <Badge variant="destructive" className="text-[10px] sm:text-xs px-1.5 py-0">失败</Badge>
+            <Badge variant="destructive" className="text-[10px] sm:text-xs px-1.5 py-0">Failed</Badge>
           )}
         </div>
         
-        {/* 处理进度 */}
+        {/* Processing progress */}
         {image.status === 'processing' && (
           <Progress value={50} className="h-1" />
         )}
         
-        {/* 处理后大小 */}
+        {/* Processed size */}
         {image.status === 'completed' && image.processedSize && (
           <div className="text-[10px] sm:text-xs text-muted-foreground">
-            处理后: {formatFileSize(image.processedSize)}
+            Processed: {formatFileSize(image.processedSize)}
           </div>
         )}
       </div>

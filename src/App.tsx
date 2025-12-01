@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Header } from './components/Layout/Header';
 import { Footer } from './components/Layout/Footer';
+import { FAQ } from './components/FAQ/FAQ';
 import { Compress } from './pages/Compress';
 import { Convert } from './pages/Convert';
 import { Resize } from './pages/Resize';
@@ -10,7 +11,7 @@ import { RemoveWatermark } from './pages/RemoveWatermark';
 import { Login } from './pages/Login';
 import { AuthCallback } from './pages/AuthCallback';
 import { Card } from './components/ui/card';
-import { Minimize2, RefreshCw, Maximize2, Crop, Type, Sparkles } from 'lucide-react';
+import { Minimize2, RefreshCw, Maximize2, Crop, Type } from 'lucide-react';
 
 function App() {
   return (
@@ -40,13 +41,13 @@ function App() {
 
 // 首页组件
 function HomePage() {
-  const tools = [
-    { icon: Sparkles, name: 'AI 去水印', desc: 'AI 智能识别并移除水印', path: '/remove-watermark', badge: 'VIP' },
-    { icon: Minimize2, name: '图片压缩', desc: '减小文件大小，不损失画质', path: '/compress' },
-    { icon: RefreshCw, name: '格式转换', desc: 'JPG、PNG、WebP 互转', path: '/convert' },
-    { icon: Maximize2, name: '调整大小', desc: '修改图片尺寸', path: '/resize' },
-    { icon: Crop, name: '图片裁剪', desc: '裁剪图片区域', path: '/crop' },
-    { icon: Type, name: '添加水印', desc: '为图片添加文字或图片水印', path: '/watermark' },
+  const tools: Array<{ icon: any; name: string; desc: string; path: string; badge?: string }> = [
+    // { icon: Sparkles, name: 'AI Watermark Removal', desc: 'AI-powered watermark removal', path: '/remove-watermark', badge: 'VIP' }, // Temporarily disabled
+    { icon: Minimize2, name: 'Compress', desc: 'Reduce file size without quality loss', path: '/compress' },
+    { icon: RefreshCw, name: 'Convert', desc: 'Convert between JPG, PNG, WebP', path: '/convert' },
+    { icon: Maximize2, name: 'Resize', desc: 'Change image dimensions', path: '/resize' },
+    { icon: Crop, name: 'Crop', desc: 'Crop image area', path: '/crop' },
+    { icon: Type, name: 'Watermark', desc: 'Add text or image watermarks', path: '/watermark' },
   ];
   
   return (
@@ -54,24 +55,24 @@ function HomePage() {
       {/* Hero Section */}
       <div className="text-center mb-12 sm:mb-16">
         <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4">
-          ImageKit - 图片处理神器
+          ImageKit - Image Processing Toolkit
         </h1>
         <p className="text-base sm:text-lg lg:text-xl text-muted-foreground mb-6 sm:mb-8 px-4">
-          完全免费 · 本地处理 · 隐私安全 · 比 TinyPNG 更强大
+          Free · Local Processing · Privacy First · More Powerful than TinyPNG
         </p>
         
         <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 mb-6 sm:mb-8">
           <div className="min-w-[100px]">
-            <span className="text-2xl sm:text-3xl font-bold text-primary">100万+</span>
-            <p className="text-xs sm:text-sm text-muted-foreground">已处理图片</p>
+            <span className="text-2xl sm:text-3xl font-bold text-primary">1M+</span>
+            <p className="text-xs sm:text-sm text-muted-foreground">Images Processed</p>
           </div>
           <div className="min-w-[100px]">
             <span className="text-2xl sm:text-3xl font-bold text-primary">1.2TB</span>
-            <p className="text-xs sm:text-sm text-muted-foreground">节省空间</p>
+            <p className="text-xs sm:text-sm text-muted-foreground">Space Saved</p>
           </div>
           <div className="min-w-[100px]">
-            <span className="text-2xl sm:text-3xl font-bold text-primary">0元</span>
-            <p className="text-xs sm:text-sm text-muted-foreground">完全免费</p>
+            <span className="text-2xl sm:text-3xl font-bold text-primary">Free</span>
+            <p className="text-xs sm:text-sm text-muted-foreground">100% Free</p>
           </div>
         </div>
       </div>
@@ -103,36 +104,39 @@ function HomePage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 max-w-6xl mx-auto mt-12 sm:mt-16">
         <Card className="p-5 sm:p-6 text-center">
           <div className="text-2xl sm:text-3xl mb-2">🔒</div>
-          <h3 className="font-bold mb-2 text-sm sm:text-base">隐私安全</h3>
+          <h3 className="font-bold mb-2 text-sm sm:text-base">Privacy First</h3>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            所有图片在浏览器本地处理，不上传服务器
+            All images processed locally in your browser, never uploaded
           </p>
         </Card>
         
         <Card className="p-5 sm:p-6 text-center">
           <div className="text-2xl sm:text-3xl mb-2">⚡</div>
-          <h3 className="font-bold mb-2 text-sm sm:text-base">极速处理</h3>
+          <h3 className="font-bold mb-2 text-sm sm:text-base">Lightning Fast</h3>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            本地处理速度快，无需等待上传下载
+            Local processing is fast, no waiting for upload/download
           </p>
         </Card>
         
         <Card className="p-5 sm:p-6 text-center">
           <div className="text-2xl sm:text-3xl mb-2">💰</div>
-          <h3 className="font-bold mb-2 text-sm sm:text-base">完全免费</h3>
+          <h3 className="font-bold mb-2 text-sm sm:text-base">100% Free</h3>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            所有功能永久免费，无隐藏收费
+            All features permanently free, no hidden charges
           </p>
         </Card>
         
         <Card className="p-5 sm:p-6 text-center">
           <div className="text-2xl sm:text-3xl mb-2">🎨</div>
-          <h3 className="font-bold mb-2 text-sm sm:text-base">功能强大</h3>
+          <h3 className="font-bold mb-2 text-sm sm:text-base">Powerful Features</h3>
           <p className="text-xs sm:text-sm text-muted-foreground">
-            压缩、转换、裁剪、水印...一站式解决所有需求
+            Compress, convert, crop, watermark... All-in-one solution
           </p>
         </Card>
       </div>
+
+      {/* FAQ Section */}
+      <FAQ />
     </div>
   );
 }

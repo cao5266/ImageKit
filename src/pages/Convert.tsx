@@ -1,4 +1,4 @@
-// 图片格式转换页面
+// Image Format Conversion Page
 
 import { useState } from 'react';
 import { Dropzone } from '@/components/ImageUploader/Dropzone';
@@ -22,14 +22,14 @@ export function Convert() {
   const updateImage = useImageStore(state => state.updateImage);
   const clearAll = useImageStore(state => state.clearAll);
   
-  // 格式选项
+  // Format options
   const formatOptions = [
-    { value: 'jpeg' as const, label: 'JPG', desc: '通用格式，兼容性好' },
-    { value: 'png' as const, label: 'PNG', desc: '无损格式，支持透明' },
-    { value: 'webp' as const, label: 'WebP', desc: '现代格式，体积小' },
+    { value: 'jpeg' as const, label: 'JPG', desc: 'Universal format, great compatibility' },
+    { value: 'png' as const, label: 'PNG', desc: 'Lossless, supports transparency' },
+    { value: 'webp' as const, label: 'WebP', desc: 'Modern format, smaller size' },
   ];
   
-  // 转换单张图片
+  // Convert single image
   const handleConvertSingle = async (imageId: string) => {
     const image = images.find(img => img.id === imageId);
     if (!image) return;
@@ -51,12 +51,12 @@ export function Convert() {
     } catch (error) {
       updateImage(imageId, { 
         status: 'error',
-        error: error instanceof Error ? error.message : '转换失败'
+        error: error instanceof Error ? error.message : 'Conversion failed'
       });
     }
   };
   
-  // 批量转换所有图片（支持重新转换）
+  // Batch convert all images
   const handleConvertAll = async () => {
     if (images.length === 0) return;
     
@@ -71,7 +71,7 @@ export function Convert() {
     }
   };
   
-  // 下载单张图片
+  // Download single image
   const handleDownloadSingle = async (imageId: string) => {
     const image = images.find(img => img.id === imageId);
     if (!image || !image.processedUrl) return;
@@ -80,18 +80,18 @@ export function Convert() {
       const response = await fetch(image.processedUrl);
       const blob = await response.blob();
       
-      // 修改文件名扩展名
+      // Modify file extension
       const originalName = image.originalFile.name;
       const nameWithoutExt = originalName.substring(0, originalName.lastIndexOf('.'));
       const newExt = `.${targetFormat === 'jpeg' ? 'jpg' : targetFormat}`;
       
       downloadFile(blob, `${nameWithoutExt}${newExt}`);
     } catch (error) {
-      console.error('下载失败:', error);
+      console.error('Download failed:', error);
     }
   };
   
-  // 批量下载所有图片
+  // Batch download all images
   const handleDownloadAll = async () => {
     const completedImages = images.filter(
       img => img.status === 'completed' && img.processedUrl
@@ -126,13 +126,13 @@ export function Convert() {
     <div className="container mx-auto px-4 py-6 sm:py-8">
       <div className="mb-6 sm:mb-8 flex items-start justify-between">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold mb-2">格式转换</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">Format Conversion</h1>
           <p className="text-sm sm:text-base text-muted-foreground">
-            JPG、PNG、WebP 互转，支持批量处理
+            Convert between JPG, PNG, WebP, batch processing supported
           </p>
         </div>
         
-        {/* 视图切换按钮 */}
+        {/* View mode toggle */}
         {hasImages && (
           <div className="flex gap-1 border rounded-md p-1">
             <Button
@@ -156,15 +156,15 @@ export function Convert() {
       </div>
       
       <div className="flex flex-col lg:grid lg:grid-cols-4 gap-4 sm:gap-6">
-        {/* 工具面板 */}
+        {/* Tool panel */}
         <div className="lg:col-span-1 order-first">
           <Card className="p-4 sm:p-6 lg:sticky lg:top-24">
-            <h2 className="font-bold mb-4 text-base sm:text-lg">转换设置</h2>
+            <h2 className="font-bold mb-4 text-base sm:text-lg">Conversion Settings</h2>
             
             <div className="space-y-4 sm:space-y-6">
-              {/* 目标格式 */}
+              {/* Target format */}
               <div>
-                <label className="text-sm font-medium mb-2 block">目标格式</label>
+                <label className="text-sm font-medium mb-2 block">Target Format</label>
                 <div className="grid grid-cols-3 gap-2">
                   {formatOptions.map((format) => (
                     <Button
@@ -183,11 +183,11 @@ export function Convert() {
                 </p>
               </div>
               
-              {/* 质量调节（仅 JPEG 和 WebP） */}
+              {/* Quality adjustment (JPEG and WebP only) */}
               {(targetFormat === 'jpeg' || targetFormat === 'webp') && (
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="text-sm font-medium">输出质量</label>
+                    <label className="text-sm font-medium">Output Quality</label>
                     <span className="text-sm font-bold text-primary">{quality}%</span>
                   </div>
                   <Slider
@@ -200,37 +200,37 @@ export function Convert() {
                   />
                   <p className="text-xs text-muted-foreground">
                     {hasCompleted 
-                      ? '💡 修改参数后点击"重新转换"生效' 
-                      : '推荐92%（高质量输出）'
+                      ? '💡 Click "Re-convert" after changing parameters' 
+                      : 'Recommended 92% (high quality output)'
                     }
                   </p>
                 </div>
               )}
               
-              {/* PNG 提示 */}
+              {/* PNG info */}
               {targetFormat === 'png' && (
                 <div className="p-3 bg-muted rounded-lg">
                   <p className="text-xs text-muted-foreground">
-                    💡 PNG 为无损格式，不支持质量调节，会保留原始质量和透明度
+                    💡 PNG is lossless format, quality adjustment not supported, preserves original quality and transparency
                   </p>
                 </div>
               )}
               
-              {/* 统计信息 */}
+              {/* Statistics */}
               {hasImages && (
                 <div className="p-3 bg-muted rounded-lg space-y-1">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">总数</span>
+                    <span className="text-muted-foreground">Total</span>
                     <span className="font-medium">{images.length}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">已完成</span>
+                    <span className="text-muted-foreground">Completed</span>
                     <span className="font-medium text-green-600">{completedCount}</span>
                   </div>
                 </div>
               )}
               
-              {/* 操作按钮 */}
+              {/* Action buttons */}
               <div className="space-y-2">
                 <Button
                   onClick={handleConvertAll}
@@ -239,10 +239,10 @@ export function Convert() {
                   size="lg"
                 >
                   {processing 
-                    ? '转换中...' 
+                    ? 'Converting...' 
                     : hasCompleted 
-                      ? `重新转换 ${images.length}张` 
-                      : `转换 ${images.length}张`
+                      ? `Re-convert ${images.length} images` 
+                      : `Convert ${images.length} images`
                   }
                 </Button>
                 
@@ -254,7 +254,7 @@ export function Convert() {
                     className="w-full"
                   >
                     <Download className="w-4 h-4 mr-1" />
-                    <span>下载 ({completedCount})</span>
+                    <span>Download ({completedCount})</span>
                   </Button>
                   
                   <Button
@@ -264,7 +264,7 @@ export function Convert() {
                     className="w-full"
                   >
                     <Trash2 className="w-4 h-4 mr-1" />
-                    <span>清空</span>
+                    <span>Clear</span>
                   </Button>
                 </div>
               </div>
@@ -273,12 +273,12 @@ export function Convert() {
           </Card>
         </div>
         
-        {/* 主内容区 */}
+        {/* Main content */}
         <div className="lg:col-span-3">
           {!hasImages ? (
             <Dropzone />
           ) : viewMode === 'grid' ? (
-            // 网格视图
+            // Grid view
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
               {images.map(image => (
                 <ImageCard 
@@ -289,7 +289,7 @@ export function Convert() {
               ))}
             </div>
           ) : (
-            // 列表视图
+            // List view
             <div className="space-y-2 sm:space-y-3">
               {images.map(image => (
                 <ImageListItem
