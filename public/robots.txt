@@ -4,22 +4,5 @@
 User-agent: *
 Allow: /
 
-# Disallow private/admin areas (if any)
-Disallow: /api/
-Disallow: /*.json$
-
 # Sitemap
 Sitemap: https://getimagekit.com/sitemap.xml
-
-# Crawl-delay (optional, helps with server load)
-Crawl-delay: 1
-
-# Popular search engines
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Slurp
-Allow: /
